@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>Su Bosų diena!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Familjen+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffd6e7; --ink: #3a0f3d; --ink-soft: #7a3c72; --panel: #fff3f8;
+    --line: rgba(58, 15, 61, .18); --pink: #d81b63; --gold: #ffc531; --focus: #3a0f3d;
+    --ticket: #fff6e2; --beat: .465s;
+    color-scheme: light; box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1c0a24; --ink: #ffe8f2; --ink-soft: #d7a9cf; --panel: #2b1236;
+      --line: rgba(255, 232, 242, .2); --pink: #ff5096; --focus: #ffc531; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1c0a24; --ink: #ffe8f2; --ink-soft: #d7a9cf; --panel: #2b1236;
+    --line: rgba(255, 232, 242, .2); --pink: #ff5096; --focus: #ffc531; color-scheme: dark;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.0625rem; line-height: 1.5; overflow-x: hidden;
+  }
+  .page { max-width: 52rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+  header { text-align: center; margin-bottom: 1.25rem; padding: 0 .5rem; }
+  h1 { font-family: "Shrikhand", "Cooper Black", Georgia, serif; font-weight: 400; font-size: clamp(2rem, 7vw, 3.3rem); line-height: 1.05; margin: .5rem 0 .6rem; }
+  header p { margin: 0 auto; max-width: 31rem; color: var(--ink-soft); }
+
+  /* ---------- Stage ---------- */
+  .stage {
+    position: relative; overflow: hidden; border-radius: 1.75rem 1.75rem .5rem .5rem;
+    aspect-ratio: 16 / 10; min-height: 19rem;
+    background: radial-gradient(ellipse 80% 40% at 50% 100%, #5b1a5e 0%, transparent 70%), linear-gradient(180deg, #14041c 0%, #2a0a35 70%, #3d0f42 100%);
+    box-shadow: 0 1.5rem 3rem -1.25rem rgba(40, 0, 50, .6); isolation: isolate;
+  }
+  @media (max-width: 560px) { .stage { aspect-ratio: 4 / 5; } }
+  .curtain { position: absolute; top: 0; bottom: 0; width: 9%; z-index: 6; background: repeating-linear-gradient(90deg, #8e0f33 0 10px, #b3173f 10px 20px); box-shadow: inset -8px 0 14px rgba(0,0,0,.35); }
+  .curtain.l { left: 0; border-radius: 0 0 60% 0; }
+  .curtain.r { right: 0; border-radius: 0 0 0 60%; transform: scaleX(-1); }
+  .valance { position: absolute; left: 0; right: 0; top: 0; height: 7%; z-index: 7; background: radial-gradient(circle at 50% 0, #b3173f 70%, transparent 71%) 0 0 / 40px 100%, #8e0f33; }
+  .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 22%; z-index: 0; background: repeating-linear-gradient(90deg, rgba(255,197,49,.08) 0 2px, transparent 2px 46px), linear-gradient(180deg, #4a1550, #2a0a35); border-top: 3px solid #ffc531; }
+  .ballwrap { position: absolute; top: 9%; left: 50%; width: 3.2rem; height: 3.2rem; margin-left: -1.6rem; z-index: 3; }
+  .ball { width: 100%; height: 100%; border-radius: 50%; position: relative;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.35) 0 1px, transparent 1px 7px), repeating-linear-gradient(90deg, rgba(0,0,0,.35) 0 1px, transparent 1px 7px), radial-gradient(circle at 35% 30%, #fff 0%, #cfd6e6 30%, #7e86a0 80%); }
+  .ball::before { content: ""; position: absolute; left: 50%; top: -60px; height: 60px; border-left: 2px solid #777; }
+  .music .ball { animation: ballspin 2s linear infinite; }
+  @keyframes ballspin { to { background-position: 0 0, 28px 0, 0 0; } }
+  .balltank { position: absolute; left: -20%; top: 30%; width: 140%; opacity: 0; transform: translateY(-140px) rotate(-30deg); transition: transform .8s cubic-bezier(.3,1.5,.5,1) .6s, opacity .2s .6s; }
+  .balltank.on { opacity: 1; transform: rotate(-12deg); }
+  .music .balltank.on { animation: dangle 1.2s ease-in-out infinite alternate; }
+  @keyframes dangle { from { transform: rotate(-16deg); } to { transform: rotate(-6deg); } }
+  .beam { position: absolute; top: -10%; width: 30%; height: 120%; z-index: 1; opacity: 0; background: linear-gradient(180deg, rgba(255,220,120,.55), rgba(255,220,120,0) 85%); clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%); transition: opacity .6s; mix-blend-mode: screen; }
+  .beam.a { left: 8%; transform-origin: 50% 0; transform: rotate(-18deg); }
+  .beam.b { right: 8%; transform-origin: 50% 0; transform: rotate(18deg); background: linear-gradient(180deg, rgba(255,80,150,.5), rgba(255,80,150,0) 85%); }
+  .music .beam { opacity: 1; }
+  .music .beam.a { animation: sweepA calc(var(--beat) * 8) ease-in-out infinite alternate; }
+  .music .beam.b { animation: sweepB calc(var(--beat) * 8) ease-in-out infinite alternate; }
+  @keyframes sweepA { from { transform: rotate(-28deg); } to { transform: rotate(12deg); } }
+  @keyframes sweepB { from { transform: rotate(28deg); } to { transform: rotate(-12deg); } }
+
+  .prop { position: absolute; bottom: 20%; width: 13%; max-width: 4.5rem; z-index: 5; opacity: 0; transition: opacity .3s, transform .4s; pointer-events: none; }
+  .fan { left: 10%; }
+  .can { right: 10%; width: 8%; max-width: 3rem; transform-origin: 50% 100%; }
+  .show-fan .fan, .show-can .can { opacity: 1; }
+  .can.psst { animation: psst .25s; }
+  @keyframes psst { 40% { transform: rotate(-18deg) translateY(-4px); } }
+  .fan .blades { transform-origin: 50px 45px; transform-box: view-box; }
+  .blowing .fan .blades { animation: spin .12s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .gusts { position: absolute; inset: 0; z-index: 4; pointer-events: none; opacity: 0; transition: opacity .2s; }
+  .blowing .gusts { opacity: 1; }
+  .gusts i { position: absolute; left: -20%; height: 2px; width: 18%; border-radius: 2px; background: rgba(255,255,255,.55); animation: gust .5s linear infinite; }
+  @keyframes gust { to { transform: translateX(700%); } }
+  .glitter { position: absolute; width: 7px; height: 7px; border-radius: 2px; z-index: 5; pointer-events: none; }
+
+  .roo { position: absolute; bottom: 5%; left: 0; width: 18%; max-width: 7rem; z-index: 4; opacity: 0; pointer-events: none; }
+  .finale .roo { opacity: 1; animation: rooCross 5.5s linear infinite; }
+  .finale .roo svg { animation: hop var(--beat) cubic-bezier(.3,0,.5,1) infinite; }
+  @keyframes rooCross { from { transform: translateX(-120%); } to { transform: translateX(650%); } }
+  @keyframes hop { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-40%); } }
+
+  .troupe { position: absolute; left: 12%; right: 12%; bottom: 6%; z-index: 2; display: flex; justify-content: space-around; align-items: flex-end; }
+  .dancer { flex: 0 1 30%; max-width: 9.5rem; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; color: #ffe8f2; font: inherit; -webkit-tap-highlight-color: transparent; border-radius: 1rem; position: relative; }
+  .dancer:focus-visible { outline: 3px solid #ffc531; outline-offset: 4px; }
+  .dancer .tag { display: block; font-size: .8rem; font-weight: 700; margin-top: .1rem; opacity: .85; }
+  .fig { width: 100%; height: auto; display: block; overflow: visible; transition: filter .6s; }
+  .fig * { transform-box: view-box; }
+  .glam .fig { filter: drop-shadow(0 0 6px rgba(255, 210, 90, .75)); }
+  .whole { transform-origin: 60px 236px; }
+  .upper { transform-origin: 60px 150px; }
+  .hair { transform-origin: 60px 44px; }
+  .brows { transform-origin: 60px 48px; }
+  .tank { transition: transform .9s cubic-bezier(.2,.8,.3,1), opacity .9s; }
+  .pants { transition: transform 1.1s cubic-bezier(.3,.7,.4,1), opacity 1.1s; }
+  .under { opacity: 0; }
+  .finale .under { opacity: 1; }
+  .finale .pants { transform: translate(var(--px), 320px) rotate(var(--pr)); opacity: 0; }
+  .tank.gone { transform: translate(var(--fx), -420px) rotate(var(--fr)); opacity: 0; }
+  .lasso, .sparkle, .pec { transform-box: fill-box; transform-origin: center; }
+  .lasso { opacity: 0; }
+  .sparkle { opacity: 0; }
+  .ripped .sparkle { animation: twinkle 1.6s ease-in-out infinite; }
+  .glam .sparkle { animation-duration: .7s; }
+  @keyframes twinkle { 0%,100% { opacity: 0; transform: scale(.4); } 50% { opacity: 1; transform: scale(1); } }
+  .shy .whole { animation: shy 2.4s ease-in-out infinite; }
+  @keyframes shy { 0%,100% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } }
+
+  .head { transform-origin: 60px 76px; }
+  .music .whole { animation: bob var(--beat) cubic-bezier(.3,0,.5,1) infinite; }
+  .music .upper { animation: lean calc(var(--beat) * 2) ease-in-out infinite; }
+  .music .head { animation: nod var(--beat) ease-in-out infinite; }
+  .music .legs { animation: step calc(var(--beat) * 2) ease-in-out infinite; transform-origin: 60px 232px; }
+  .music .arm-l { animation: swayL calc(var(--beat) * 2) ease-in-out infinite; }
+  .music .arm-r { animation: swayR calc(var(--beat) * 2) ease-in-out infinite; }
+  .music .dancer:nth-child(2) .upper, .music .dancer:nth-child(2) .arm, .music .dancer:nth-child(2) .legs { animation-delay: calc(var(--beat) * -1); }
+  @keyframes lean { 0%,100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+  @keyframes nod { 0%,100% { transform: rotate(0); } 50% { transform: rotate(6deg) translateY(2px); } }
+  @keyframes step { 0%,100% { transform: skewX(-7deg); } 50% { transform: skewX(7deg); } }
+  .music .brows { animation: waggle calc(var(--beat) * 4) steps(1, end) infinite; }
+  .music .dancer:nth-child(2) .whole { animation-delay: calc(var(--beat) / -2); }
+  @keyframes bob { 0%,100% { transform: translateY(0) scaleY(1); } 12% { transform: translateY(2px) scaleY(.96); } 50% { transform: translateY(-16px) scaleY(1.02); } }
+  @keyframes swayL { 0%,100% { transform: rotate(20deg); } 50% { transform: rotate(160deg); } }
+  @keyframes swayR { 0%,100% { transform: rotate(-160deg); } 50% { transform: rotate(-20deg); } }
+  @keyframes waggle { 0%, 60%, 100% { transform: translateY(0); } 70% { transform: translateY(-4px); } 80% { transform: translateY(0); } 90% { transform: translateY(-4px); } }
+
+  .windswept .hair { animation: flutter .7s ease-in-out infinite alternate; }
+  .blowing .hair { animation: flutterHard .12s linear infinite alternate; }
+  @keyframes flutter { from { transform: skewX(-10deg); } to { transform: skewX(-22deg) translateX(-2px); } }
+  @keyframes flutterHard { from { transform: skewX(-18deg) translateX(-2px); } to { transform: skewX(-38deg) translateX(-6px); } }
+  .blowing .upper { transform: rotate(5deg); transition: transform .3s; }
+
+  .move-roll .upper { animation: roll calc(var(--beat) * 2) ease-in-out infinite; }
+  .move-roll .whole { animation: hips var(--beat) ease-in-out infinite; }
+  .move-roll .legs { animation: none; }
+  @keyframes roll { 0%,100% { transform: skewX(0) translateX(0); } 25% { transform: skewX(18deg) translateX(-9px); } 75% { transform: skewX(-18deg) translateX(9px); } }
+  @keyframes hips { 0%,100% { transform: translateX(0); } 25% { transform: translateX(9px) translateY(-8px); } 75% { transform: translateX(-9px) translateY(-8px); } }
+  .move-lasso .arm-r { animation: lassoArm var(--beat) ease-in-out infinite; }
+  .move-lasso .arm-l { animation: none; transform: rotate(40deg); }
+  .move-lasso .head, .move-sprinkler .head { animation: nod calc(var(--beat) / 2) ease-in-out infinite; }
+  .move-lasso .lasso { opacity: 1; animation: rope calc(var(--beat) / 2) linear infinite; }
+  @keyframes lassoArm { 0%,100% { transform: rotate(-168deg); } 50% { transform: rotate(-178deg); } }
+  @keyframes rope { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(-1); } }
+  .move-sprinkler .arm-l { animation: none; transform: rotate(165deg); }
+  .move-sprinkler .arm-r { animation: sprinkle calc(var(--beat) * 4) steps(1, end) infinite; }
+  @keyframes sprinkle { 0% { transform: rotate(-60deg); } 12% { transform: rotate(-70deg); } 24% { transform: rotate(-80deg); } 36% { transform: rotate(-90deg); } 48% { transform: rotate(-100deg); } 60% { transform: rotate(-110deg); } 70% { transform: rotate(-95deg); } 78% { transform: rotate(-80deg); } 86% { transform: rotate(-70deg); } 100% { transform: rotate(-60deg); } }
+  .move-pec .arm-l { animation: none; transform: rotate(-35deg); }
+  .move-pec .arm-r { animation: none; transform: rotate(35deg); }
+  .move-pec .upper, .move-pec .legs { animation: none; }
+  .move-pec .pec-l { animation: pec var(--beat) steps(1, end) infinite; }
+  .move-pec .pec-r { animation: pec var(--beat) steps(1, end) infinite; animation-delay: calc(var(--beat) / -2); }
+  .move-pec .brows { animation: waggle var(--beat) steps(1, end) infinite; }
+  @keyframes pec { 0% { transform: translateY(-7px) scale(1.25); } 50% { transform: translateY(0) scale(1); } }
+
+  .finale .whole { animation: jump var(--beat) cubic-bezier(.3,0,.5,1) infinite; }
+  @keyframes jump { 0%,100% { transform: translateY(0) scaleY(1); } 15% { transform: translateY(2px) scaleY(.92); } 50% { transform: translateY(-32px) scaleY(1.04); } }
+  .finale .arm-l { animation: swayL var(--beat) ease-in-out infinite; }
+  .finale .arm-r { animation: swayR var(--beat) ease-in-out infinite; }
+  .finale .upper { animation: roll calc(var(--beat) * 2) ease-in-out infinite; }
+  .finale .legs { animation: none; }
+
+  .flash { position: absolute; inset: 0; z-index: 9; background: #fffbe6; opacity: 0; pointer-events: none; }
+  .flash.go { animation: flash 1.1s ease-out; }
+  @keyframes flash { 0% { opacity: 0; } 4% { opacity: .95; } 10% { opacity: .1; } 16% { opacity: .85; } 30%,100% { opacity: 0; } }
+  .drumroll .troupe { animation: tremble .06s linear infinite; }
+  @keyframes tremble { 50% { transform: translateX(2px); } }
+  canvas#sparks { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 40; }
+
+  /* ---------- Panel ---------- */
+  .panel { background: var(--panel); border: 1.5px solid var(--line); border-radius: .5rem .5rem 1.75rem 1.75rem; padding: 1.25rem 1.25rem 1.5rem; margin-top: .5rem; }
+  .steps { display: flex; gap: .4rem; list-style: none; margin: 0 0 1rem; padding: 0; justify-content: center; flex-wrap: wrap; }
+  .steps li { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; border: 2px solid var(--line); font-weight: 700; font-size: .9rem; color: var(--ink-soft); }
+  .steps li.current { border-color: var(--pink); color: var(--pink); }
+  .steps li.done { background: var(--gold); border-color: var(--gold); color: #3a0f3d; }
+  .task { text-align: center; min-height: 9rem; }
+  .task h2 { font-family: "Shrikhand", "Cooper Black", Georgia, serif; font-weight: 400; font-size: clamp(1.5rem, 5vw, 2rem); line-height: 1.1; margin: 0 0 .35rem; }
+  .task p { margin: 0 auto 1rem; color: var(--ink-soft); max-width: 29rem; }
+  .btn { font: inherit; font-weight: 700; font-size: 1.05rem; padding: .85rem 1.5rem; border-radius: 999px; border: 2px solid var(--pink); background: var(--pink); color: #fff; cursor: pointer; text-decoration: none; display: inline-block; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:active { transform: scale(.96); }
+  .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn.picked { background: var(--gold); border-color: var(--gold); color: #3a0f3d; }
+  .btn:disabled { opacity: .7; cursor: default; }
+  .btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .btn.big { font-size: 1.25rem; padding: 1rem 2rem; }
+  .row { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
+  .meter { height: .9rem; max-width: 18rem; margin: 1rem auto 0; border-radius: 999px; background: var(--line); overflow: hidden; }
+  .meter span { display: block; height: 100%; width: 0; background: var(--gold); border-radius: 999px; transition: width .15s; }
+  .meter.live span { transition: none; }
+  .sound { position: fixed; top: calc(env(safe-area-inset-top, 0px) + .75rem); right: .75rem; z-index: 30; font: inherit; font-size: .9rem; background: var(--panel); color: var(--ink); border: 1.5px solid var(--line); border-radius: 999px; padding: .35rem .85rem; cursor: pointer; }
+  .sound:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  /* ---------- Reveal ---------- */
+  .ticket { display: grid; grid-template-columns: 1fr auto; text-align: left; background: var(--ticket); color: #3a0f3d; border-radius: .9rem; margin: 1rem auto 1.5rem; max-width: 31rem; box-shadow: 0 1.25rem 2.5rem -1rem rgba(60,0,60,.5); animation: drop 1s cubic-bezier(.2,1.3,.4,1) both; }
+  @keyframes drop { from { transform: translateY(-120px) rotate(8deg) scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+  .ticket-main { padding: 1.3rem 1.2rem 1.3rem 1.4rem; }
+  .ticket-main .admit { font-size: .92rem; color: #c2185b; font-weight: 700; margin: 0 0 .3rem; }
+  .ticket-main h3 { font-family: "Shrikhand", Georgia, serif; font-weight: 400; font-size: clamp(1.35rem, 5vw, 1.85rem); line-height: 1.05; margin: 0 0 .6rem; }
+  .ticket-main dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .15rem .75rem; font-size: .96rem; }
+  .ticket-main dt { font-weight: 700; }
+  .ticket-main dd { margin: 0; }
+  .ticket-stub { width: 4.5rem; border-left: 2px dashed rgba(58,15,61,.35); display: grid; place-items: center; position: relative; }
+  .ticket-stub span { writing-mode: vertical-rl; transform: rotate(180deg); font-family: "Shrikhand", Georgia, serif; font-size: 1.2rem; color: #c2185b; }
+  .ticket-stub::before, .ticket-stub::after { content: ""; position: absolute; left: -.8rem; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--panel); }
+  .ticket-stub::before { top: -.75rem; } .ticket-stub::after { bottom: -.75rem; }
+  .files { margin: 0 auto 1.5rem; max-width: 40rem; }
+  .files h3 { font-family: "Shrikhand", Georgia, serif; font-weight: 400; font-size: 1.35rem; margin: 0 0 .6rem; }
+  .scans { display: grid; gap: .75rem; margin-bottom: 1rem; }
+  .scans figure { margin: 0; background: #fff; border-radius: .6rem; padding: .4rem; border: 1.5px solid var(--line); }
+  .scans img { display: block; width: 100%; height: auto; border-radius: .35rem; }
+  .scans figcaption { font-size: .85rem; color: #555; padding: .35rem .25rem .1rem; text-align: left; }
+  .dlmsg { min-height: 1.5em; margin: .6rem 0 0 !important; font-size: .95rem; }
+  .note { max-width: 28rem; margin: 0 auto 1.25rem; }
+  .note p { margin: 0 0 .5rem; color: var(--ink); }
+  .sign { font-family: "Shrikhand", Georgia, serif; font-size: 1.2rem; color: var(--pink) !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .music .whole, .music .arm-l, .music .arm-r, .move-roll .upper, .move-roll .whole, .finale .whole, .shy .whole,
+    .music .beam.a, .music .beam.b, .music .ball, .ticket, .drumroll .troupe, .finale .roo, .finale .roo svg, .music .brows { animation: none !important; }
+    .finale .roo { left: 40%; }
+    .blowing .hair, .windswept .hair { animation: none; transform: skewX(-18deg); }
+    .gusts i { animation: none; }
+    .flash.go { animation: flashsoft .6s ease-out; }
+    @keyframes flashsoft { 0% { opacity: 0; } 20% { opacity: .35; } 100% { opacity: 0; } }
+  }
+  /* ---------- Plačiuose ekranuose: scena kairėje, užduotys dešinėje ---------- */
+  @media (min-width: 900px) {
+    .page {
+      max-width: 112rem; padding: 1.5rem 2rem 2rem;
+      display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(22rem, 1fr);
+      grid-template-areas: "stage header" "stage panel"; grid-template-rows: auto 1fr;
+      column-gap: 1.75rem; align-items: start;
+    }
+    header { grid-area: header; text-align: left; margin: 0 0 1rem; padding: 0 7.5rem 0 0; }
+    header h1 { font-size: clamp(2rem, 3vw, 3.1rem); margin-top: .25rem; }
+    header p { margin: 0; }
+    .stage {
+      grid-area: stage; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 1.5rem);
+      aspect-ratio: auto; height: min(calc(100svh - 3rem), 62rem); min-height: 30rem; border-radius: 1.75rem;
+    }
+    .panel { grid-area: panel; margin-top: 0; border-radius: 1.75rem; }
+    .task { text-align: left; }
+    .task p { margin-left: 0; }
+    .steps, .row { justify-content: flex-start; }
+    .meter { margin-left: 0; }
+    .ticket, .files, .note { margin-left: 0; }
+    .dancer { max-width: min(14rem, calc(31svh - 1rem)); }
+  }
+  @media (min-width: 1500px) {
+    .page { grid-template-columns: minmax(0, 2fr) minmax(26rem, 1fr); }
+  }
+  @media (max-width: 899px) { header { padding-top: 2.25rem; } }
+</style>
+</head>
+<body>
+<button class="sound" id="soundBtn" aria-pressed="true">Garsas įjungtas</button>
+<canvas id="sparks" aria-hidden="true"></canvas>
+
+<div class="page">
+  <header>
+    <h1 id="greeting">Tavo dovana laukia užkulisiuose</h1>
+    <p>Įvykdyk šešis jų reikalavimus – ir dovana tavo!</p>
+  </header>
+
+  <div class="stage shy" id="stage">
+    <div class="valance" aria-hidden="true"></div>
+    <div class="curtain l" aria-hidden="true"></div>
+    <div class="curtain r" aria-hidden="true"></div>
+    <div class="beam a" aria-hidden="true"></div>
+    <div class="beam b" aria-hidden="true"></div>
+    <div class="ballwrap" aria-hidden="true">
+      <div class="ball"></div>
+      <svg class="balltank" id="ballTank" viewBox="0 0 50 50"><path d="M8 10 L16 2 L21 12 Q25 15 29 12 L34 2 L42 10 L41 48 L9 48 Z" fill="#4fc3d9"/></svg>
+    </div>
+    <div class="floor" aria-hidden="true"></div>
+    <svg class="prop fan" viewBox="0 0 100 120" aria-hidden="true">
+      <rect x="44" y="70" width="12" height="40" fill="#888"/><rect x="25" y="106" width="50" height="10" rx="5" fill="#666"/>
+      <circle cx="50" cy="45" r="40" fill="none" stroke="#bbb" stroke-width="4"/>
+      <g class="blades" fill="#ddd"><ellipse cx="50" cy="25" rx="9" ry="18"/><ellipse cx="50" cy="65" rx="9" ry="18"/><ellipse cx="30" cy="45" rx="18" ry="9"/><ellipse cx="70" cy="45" rx="18" ry="9"/></g>
+      <circle cx="50" cy="45" r="6" fill="#999"/>
+    </svg>
+    <svg class="prop can" id="can" viewBox="0 0 40 90" aria-hidden="true">
+      <rect x="14" y="2" width="12" height="10" rx="2" fill="#ccc"/><rect x="24" y="5" width="8" height="4" fill="#999"/>
+      <rect x="6" y="12" width="28" height="74" rx="6" fill="#ff5096"/><rect x="6" y="40" width="28" height="18" fill="#ffc531"/>
+      <text x="20" y="53" text-anchor="middle" font-size="9" font-weight="700" fill="#3a0f3d">GLAM</text>
+    </svg>
+    <div class="gusts" aria-hidden="true"><i style="top:30%"></i><i style="top:42%;animation-delay:-.2s"></i><i style="top:55%;animation-delay:-.35s"></i><i style="top:66%;animation-delay:-.1s"></i></div>
+    <div class="troupe" id="troupe"></div>
+    <div class="roo" aria-hidden="true">
+      <svg viewBox="0 0 120 120">
+        <path d="M30 88 Q2 96 4 112 Q16 98 36 96 Z" fill="#a8683a"/>
+        <ellipse cx="52" cy="78" rx="26" ry="24" fill="#c27f48"/>
+        <ellipse cx="56" cy="84" rx="13" ry="14" fill="#e8b98a"/>
+        <path d="M40 98 L30 112 L62 114 L58 100 Z" fill="#a8683a"/>
+        <path d="M66 58 Q74 40 84 38 L90 50 Q80 60 72 66 Z" fill="#c27f48"/>
+        <ellipse cx="92" cy="40" rx="15" ry="11" fill="#c27f48"/>
+        <path d="M82 32 L78 12 L88 28 Z M90 30 L92 10 L97 28 Z" fill="#a8683a"/>
+        <circle cx="94" cy="37" r="2.2" fill="#111"/><circle cx="106" cy="42" r="2.4" fill="#3a1f10"/>
+        <path d="M72 66 l-6 10 M74 62 l-2 12" stroke="#a8683a" stroke-width="5" stroke-linecap="round"/>
+        <path d="M76 50 L68 46 L68 54 Z M76 50 L84 46 L84 54 Z" fill="#111"/>
+      </svg>
+    </div>
+    <div class="flash" id="flash" aria-hidden="true"></div>
+  </div>
+
+  <section class="panel" aria-label="Užduotys">
+    <ol class="steps" id="steps" aria-hidden="true"></ol>
+    <div class="task" id="task" aria-live="polite"></div>
+  </section>
+</div>
+
+<script>
+const TICKET_IMG = ["assets/bilietas-1.jpg", "assets/bilietas-2.jpg"];
+const SONG_SRC = "assets/celebration.mp3";
+
+</script>
+<script>
+(function () {
+  /* Vardai: ?boss=Laura&from=Pardavimų%20komanda (vardą rašykite šauksmininku) */
+  const params = new URLSearchParams(location.search);
+  const boss = (params.get('boss') || '').trim().slice(0, 40);
+  const from = (params.get('from') || '').trim().slice(0, 60);
+  const esc = s => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  if (boss) document.getElementById('greeting').textContent = boss + ', tavo dovana laukia užkulisiuose';
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const stage = document.getElementById('stage');
+  const troupe = document.getElementById('troupe');
+  const task = document.getElementById('task');
+  const stepsEl = document.getElementById('steps');
+  let downloadsP = null;
+  if (window.claude && typeof window.claude.use === 'function') downloadsP = window.claude.use('downloads').catch(() => null);
+
+  /* ---------- Šokėjai ---------- */
+  const crew = [
+    { name: 'Pirmasis šokėjas', skin: '#e9b48b', shade: '#c98d63', hair: '#3b2414', tank: '#ffc531', briefs: '#d8243f', motif: '♥ ♥ ♥', stache: true, quiff: true },
+    { name: 'Antrasis šokėjas', skin: '#9c6644', shade: '#7a4b2e', hair: '#1a1010', tank: '#4fc3d9', briefs: '#1f3c88', motif: '★ ★ ★', stache: false, quiff: false },
+    { name: 'Trečiasis šokėjas',  skin: '#f2c9a4', shade: '#d6a27a', hair: '#e5b34a', tank: '#ff5096', briefs: '#ffc531', motif: '♥ ★ ♥', stache: false, quiff: true }
+  ];
+  function banner(cx, cy, w, h) {
+    const l = cx - w / 2, r = cx + w / 2, t = cy - h / 2, b = cy + h / 2, n = 3.5;
+    return `<path d="M${l} ${t} L${r} ${t} L${r - n} ${cy} L${r} ${b} L${l} ${b} L${l + n} ${cy} Z" fill="#fff3d6" stroke="#2a1840" stroke-width=".9"/>
+      <text x="${cx}" y="${cy + h * .3}" text-anchor="middle" font-family="Shrikhand, Georgia, serif" font-size="${h * .78}" textLength="${w - 12}" lengthAdjust="spacingAndGlyphs" fill="#2a1840">Jovita</text>`;
+  }
+  function tattoo(i) {
+    const art = [
+      // Širdis
+      `<path d="M60 128 C44 117 44 103 52 103 C56 103 60 107 60 111 C60 107 64 103 68 103 C76 103 76 117 60 128 Z" fill="#d8243f" stroke="#2a1840" stroke-width=".9"/>`,
+      // Karūna
+      `<path d="M46 118 L48 104 L54 111 L60 101 L66 111 L72 104 L74 118 Z" fill="#ffc531" stroke="#2a1840" stroke-width=".9"/><circle cx="60" cy="113" r="2" fill="#d8243f"/><circle cx="52" cy="114" r="1.4" fill="#4fc3d9"/><circle cx="68" cy="114" r="1.4" fill="#4fc3d9"/>`,
+      // Bučinys
+      `<path d="M45 112 Q52 102 58 106 Q60 107 62 106 Q68 102 75 112 Q60 115 45 112 Z" fill="#e0245e" stroke="#2a1840" stroke-width=".8"/><path d="M45 112 Q60 115 75 112 Q68 123 60 123 Q52 123 45 112 Z" fill="#c2185b" stroke="#2a1840" stroke-width=".8"/>`
+    ][i];
+    const bannerY = [119, 124, 131][i];
+    return `<g class="tattoo" aria-hidden="true">${art}${banner(60, bannerY, 46, 12)}</g>`;
+  }
+  function figure(d, i) {
+    const hair = d.quiff
+      ? `<path d="M37 52 Q34 26 58 24 Q80 20 84 42 Q86 30 72 28 Q90 34 83 52 Q78 40 62 38 Q46 38 40 52 Z" fill="${d.hair}"/>`
+      : `<path d="M38 52 Q36 30 60 30 Q84 30 82 52 Q76 38 60 38 Q44 38 38 52 Z" fill="${d.hair}"/>`;
+    const stache = d.stache ? `<path d="M48 67 Q60 60 72 67 Q66 72 60 68 Q54 72 48 67 Z" fill="${d.hair}"/>` : '';
+    const fx = [-160, 0, 170][i], fr = [-260, 200, 300][i];
+    return `<svg class="fig" viewBox="0 0 120 245" aria-hidden="true">
+      <ellipse cx="60" cy="238" rx="34" ry="6" fill="rgba(0,0,0,.35)"/>
+      <g class="whole">
+        <g class="legs">
+          <g class="under">
+          <rect x="41" y="156" width="18" height="72" rx="7" fill="${d.skin}"/><rect x="61" y="156" width="18" height="72" rx="7" fill="${d.skin}"/>
+          <path d="M44 196 q6 3 12 0 M64 196 q6 3 12 0" fill="none" stroke="${d.shade}" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M39 145 L81 145 L81 166 Q71 167 63 178 L57 178 Q49 167 39 166 Z" fill="${d.briefs}"/>
+          <rect x="39" y="145" width="42" height="5" fill="#fff" opacity=".9"/>
+          <text x="60" y="164" text-anchor="middle" font-size="7" fill="#fff" opacity=".85">${d.motif}</text>
+          </g>
+          <g class="pants" style="--px:${[-90, 20, 110][i]}px;--pr:${[-120, 160, 140][i]}deg">
+            <rect x="41" y="148" width="18" height="80" rx="6" fill="#2d4a8a"/><rect x="61" y="148" width="18" height="80" rx="6" fill="#2d4a8a"/>
+            <path d="M58 150 L60 192 L62 150 Z" fill="#203766"/>
+            <rect x="39" y="144" width="42" height="8" rx="2" fill="#5a3418"/><rect x="55" y="143" width="10" height="10" rx="2" fill="#ffc531"/>
+          </g>
+          <rect x="38" y="224" width="22" height="10" rx="4" fill="#5a3418"/><rect x="60" y="224" width="22" height="10" rx="4" fill="#5a3418"/>
+        </g>
+        <g class="upper">
+          <g class="arm arm-l" style="transform-origin:38px 96px"><rect x="30" y="92" width="16" height="56" rx="8" fill="${d.skin}"/><circle cx="38" cy="150" r="8" fill="${d.skin}"/></g>
+          <g class="arm arm-r" style="transform-origin:82px 96px"><rect x="74" y="92" width="16" height="56" rx="8" fill="${d.skin}"/><circle cx="82" cy="150" r="8" fill="${d.skin}"/></g>
+          <ellipse class="lasso" cx="82" cy="22" rx="24" ry="6" fill="none" stroke="#e8c27a" stroke-width="3"/>
+          <rect x="53" y="72" width="14" height="18" fill="${d.skin}"/>
+          <path d="M34 92 Q60 82 86 92 L80 148 L40 148 Z" fill="${d.skin}"/>
+          <g class="pec pec-l"><path d="M41 98 Q50 96 59 100 L59 106 Q51 116 42 104 Z" fill="${d.shade}" opacity=".35"/><path d="M42 104 Q51 116 59 106" fill="none" stroke="${d.shade}" stroke-width="2" stroke-linecap="round"/><circle cx="51" cy="106" r="1.3" fill="${d.shade}"/></g>
+          <g class="pec pec-r"><path d="M79 98 Q70 96 61 100 L61 106 Q69 116 78 104 Z" fill="${d.shade}" opacity=".35"/><path d="M78 104 Q69 116 61 106" fill="none" stroke="${d.shade}" stroke-width="2" stroke-linecap="round"/><circle cx="69" cy="106" r="1.3" fill="${d.shade}"/></g>
+          <g fill="${d.shade}" opacity=".55">
+            <rect x="51" y="116" width="8" height="7" rx="3"/><rect x="61" y="116" width="8" height="7" rx="3"/>
+            <rect x="51" y="125" width="8" height="7" rx="3"/><rect x="61" y="125" width="8" height="7" rx="3"/>
+            <rect x="52" y="134" width="7" height="6" rx="3"/><rect x="61" y="134" width="7" height="6" rx="3"/>
+          </g>
+          <path class="sparkle" d="M84 110 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 Z" fill="#fff6c0"/>
+          <path class="sparkle" style="animation-delay:-.8s" d="M36 124 l1.5 4.5 4.5 1.5 -4.5 1.5 -1.5 4.5 -1.5 -4.5 -4.5 -1.5 4.5 -1.5 Z" fill="#fff6c0"/>
+          <path class="sparkle" style="animation-delay:-.4s" d="M60 90 l1.5 4.5 4.5 1.5 -4.5 1.5 -1.5 4.5 -1.5 -4.5 -4.5 -1.5 4.5 -1.5 Z" fill="#fff6c0"/>
+          ${tattoo(i)}
+          <g class="tank" style="--fx:${fx}px;--fr:${fr}deg">
+            <path d="M38 94 L45 86 L51 96 Q60 102 69 96 L75 86 L82 94 L81 150 L39 150 Z" fill="${d.tank}"/>
+            <text x="60" y="130" text-anchor="middle" font-family="Shrikhand, Georgia, serif" font-size="11" fill="rgba(0,0,0,.45)">B'DAY</text>
+          </g>
+          <path d="M60 86 L50 81 L50 91 Z M60 86 L70 81 L70 91 Z" fill="#111"/><circle cx="60" cy="86" r="2.6" fill="#111"/>
+          <g class="head">
+            <circle cx="38" cy="58" r="5" fill="${d.skin}"/><circle cx="82" cy="58" r="5" fill="${d.skin}"/>
+            <circle cx="60" cy="56" r="22" fill="${d.skin}"/>
+            <g class="hair">${hair}</g>
+            <g class="brows"><path d="M45 47 Q51 43 57 46 M63 46 Q69 43 75 47" fill="none" stroke="${d.hair}" stroke-width="2.5" stroke-linecap="round"/></g>
+            <rect x="44" y="50" width="14" height="9" rx="3" fill="#111"/><rect x="62" y="50" width="14" height="9" rx="3" fill="#111"/>
+            <rect x="57" y="52" width="6" height="2" fill="#111"/><path d="M46 52 l3 0" stroke="#fff" stroke-width="1.5" opacity=".7"/>
+            ${stache}
+            <path d="M50 70 Q60 80 70 70 Z" fill="#fff" stroke="#6b2a2a" stroke-width="1.5" stroke-linejoin="round"/>
+          </g>
+        </g>
+      </g>
+    </svg>`;
+  }
+  crew.forEach((d, i) => {
+    const b = document.createElement('button');
+    b.className = 'dancer'; b.type = 'button';
+    b.setAttribute('aria-label', d.name + ', su marškinėliais');
+    b.innerHTML = figure(d, i);
+    b.addEventListener('click', () => onDancer(i, b));
+    troupe.appendChild(b);
+  });
+  const dancers = [...troupe.children];
+
+  /* ---------- Garsas: viskas sintezuojama naršyklėje ---------- */
+  let ctx = null, master = null, musicBus = null, noiseBuf = null, soundOn = true;
+  function audio() {
+    if (!ctx) {
+      try {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        master = ctx.createGain(); master.gain.value = .8;
+        const comp = ctx.createDynamicsCompressor(); master.connect(comp); comp.connect(ctx.destination);
+        musicBus = ctx.createGain(); musicBus.gain.value = .5; musicBus.connect(master);
+        noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+        const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      } catch (e) { ctx = null; }
+    }
+    if (ctx && ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
+  function env(g, t, peak, dec, att) { g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + (att || .004)); g.gain.exponentialRampToValueAtTime(.0001, t + dec); }
+  function noise(t, dur, type, freq, peak, dest, q) {
+    const s = ctx.createBufferSource(); s.buffer = noiseBuf;
+    const f = ctx.createBiquadFilter(); f.type = type; f.frequency.value = freq; if (q) f.Q.value = q;
+    const g = ctx.createGain(); env(g, t, peak, dur);
+    s.connect(f).connect(g).connect(dest || musicBus); s.start(t); s.stop(t + dur + .05);
+  }
+  function tone(t, type, freq, dur, peak, filt, dest, att) {
+    const o = ctx.createOscillator(); o.type = type; o.frequency.setValueAtTime(freq, t);
+    const g = ctx.createGain(); env(g, t, peak, dur, att);
+    let n = o;
+    if (filt) { const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(filt, t); f.frequency.exponentialRampToValueAtTime(Math.max(120, filt / 5), t + dur); o.connect(f); n = f; }
+    n.connect(g).connect(dest || musicBus); o.start(t); o.stop(t + dur + .05);
+    return o;
+  }
+  function vibrato(o, t, rate, depth, dur) {
+    const l = ctx.createOscillator(); l.frequency.value = rate;
+    const lg = ctx.createGain(); lg.gain.value = depth;
+    l.connect(lg).connect(o.frequency); l.start(t); l.stop(t + dur + .1);
+    return lg;
+  }
+  // Kazoo: buzzy saw with vibrato through two formant filters
+  function kazoo(t, m, dur, vol, dest) {
+    const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.setValueAtTime(mtof(m) * .985, t);
+    o.frequency.exponentialRampToValueAtTime(mtof(m), t + .05);
+    vibrato(o, t, 6.5, mtof(m) * .02, dur);
+    const f1 = ctx.createBiquadFilter(); f1.type = 'bandpass'; f1.frequency.value = 1100; f1.Q.value = 1.6;
+    const f2 = ctx.createBiquadFilter(); f2.type = 'peaking'; f2.frequency.value = 2600; f2.gain.value = 10; f2.Q.value = 2;
+    const g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .025);
+    g.gain.setValueAtTime(vol, t + dur * .8); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(f1).connect(f2).connect(g).connect(dest || musicBus); o.start(t); o.stop(t + dur + .05);
+  }
+  const kick = t => { const o = tone(t, 'sine', 150, .28, .8); o.frequency.exponentialRampToValueAtTime(42, t + .12); };
+  const clap = t => { noise(t, .15, 'bandpass', 1500, .45, null, .8); noise(t + .012, .12, 'bandpass', 1300, .3, null, .8); };
+  const hat = (t, open) => noise(t, open ? .14 : .035, 'highpass', 7500, open ? .14 : .07);
+  const cowbell = t => { tone(t, 'square', 560, .22, .06, 2500); tone(t, 'square', 845, .22, .06, 2500); };
+  const tuba = (t, m, len) => { const o = tone(t, 'square', mtof(m), len, .32, 700, null, .015); o.frequency.exponentialRampToValueAtTime(mtof(m) * .97, t + len); };
+  const pah = (t, notes) => notes.forEach(m => tone(t, 'square', mtof(m), .12, .035, 2200));
+  function honk(t, f, dest) { tone(t, 'square', f, .13, .09, 1800, dest); tone(t, 'square', f * 1.34, .13, .07, 1800, dest); }
+  function boingAt(t, dest, base) {
+    const o = ctx.createOscillator(); o.type = 'sine'; base = base || 140;
+    o.frequency.setValueAtTime(base, t); o.frequency.exponentialRampToValueAtTime(base * 3, t + .45);
+    const lg = vibrato(o, t, 22, 70, .6); lg.gain.setValueAtTime(70, t); lg.gain.exponentialRampToValueAtTime(2, t + .6);
+    const g = ctx.createGain(); env(g, t, .35, .6, .01);
+    o.connect(g).connect(dest || master); o.start(t); o.stop(t + .7);
+  }
+  function slideAt(t, up, dest, vol) {
+    const o = ctx.createOscillator(); o.type = 'sine';
+    o.frequency.setValueAtTime(up ? 500 : 2200, t); o.frequency.exponentialRampToValueAtTime(up ? 2200 : 450, t + .55);
+    vibrato(o, t, 7, 25, .6);
+    const g = ctx.createGain(); env(g, t, vol || .22, .62, .04);
+    o.connect(g).connect(dest || master); o.start(t); o.stop(t + .7);
+  }
+  function squeakAt(t, dest, p) {
+    p = p || 1;
+    const o = ctx.createOscillator(); o.type = 'triangle';
+    o.frequency.setValueAtTime(1100 * p, t); o.frequency.exponentialRampToValueAtTime(1900 * p, t + .06); o.frequency.exponentialRampToValueAtTime(1300 * p, t + .14);
+    vibrato(o, t, 40, 60, .15);
+    const g = ctx.createGain(); env(g, t, .25, .16, .005);
+    o.connect(g).connect(dest || master); o.start(t); o.stop(t + .2);
+  }
+
+  // Muzika: polkos ir disko kratinys su kazu
+  const BPM = 124, S16 = 60 / BPM / 4;
+  const chords = [[48, 60, 64, 67], [53, 60, 65, 69], [55, 59, 62, 67], [48, 60, 64, 67]]; // C F G C
+  const melody = [
+    [72,0,72,0, 76,0,79,0, 76,0,72,0, 74,0,76,0],
+    [77,0,77,0, 76,0,74,0, 72,0,0,0, 69,0,72,0],
+    [74,0,74,0, 79,0,77,0, 76,0,74,0, 71,0,74,0],
+    [72,0,76,0, 79,0,84,0, 0,0,0,0, 0,0,0,0]
+  ];
+  let stepNo = 0, nextT = 0, timer = null, currentMove = null;
+  function scheduleStep(n, t) {
+    const s = n % 16, barNo = Math.floor(n / 16), b4 = barNo % 4, phrase = Math.floor(barNo / 4), ch = chords[b4];
+    if (s % 4 === 0) kick(t);
+    if (s === 4 || s === 12) clap(t);
+    hat(t, s % 4 === 2);
+    if (s === 0) tuba(t, ch[0] - 12, S16 * 3);
+    if (s === 8) tuba(t, ch[0] - 5, S16 * 3);
+    if (s === 4 || s === 12) pah(t, ch.slice(1));
+    if ((s === 7 || s === 15) && barNo % 2 === 1) cowbell(t);
+    const note = melody[b4][s];
+    if (phrase % 2 === 0 && note) kazoo(t, note, S16 * 1.8, .16);
+    if (phrase % 2 === 1 && note && s % 4 === 0) kazoo(t, note - 12, S16 * 3.5, .12);
+    if (b4 === 3 && s === 10) { if (phrase % 2) slideAt(t, true, musicBus, .18); else boingAt(t, musicBus); }
+    // Kiekvienas judesys turi savo kvailą garsą
+    if (currentMove === 'pec' && s % 4 === 0) honk(t, s % 8 === 0 ? 330 : 392, musicBus);
+    if (currentMove === 'roll' && s === 0 && barNo % 2 === 0) boingAt(t, musicBus, 110);
+    if (currentMove === 'lasso' && s === 0) slideAt(t, barNo % 2 === 0, musicBus, .14);
+    if (currentMove === 'sprinkler' && s >= 8) noise(t, .03, 'highpass', 5000, .16);
+  }
+  let song = null, songPlaying = false;
+  function ensureSong() {
+    if (!song) { song = new Audio(SONG_SRC); song.loop = true; song.preload = 'auto'; song.volume = 1; song.muted = !soundOn; }
+    return song;
+  }
+  // gesture = true when called from a tap/click/key press (then sound effects can start too)
+  function startMusic(gesture = true) {
+    if (gesture) audio();
+    const s = ensureSong();
+    if (songPlaying) return Promise.resolve(true);
+    return s.play().then(() => { songPlaying = true; return true; }).catch(() => false);
+  }
+  function beginShow() {
+    if (current !== 0) return;
+    stage.classList.remove('shy'); stage.classList.add('music'); go(1);
+  }
+  function songVolume(v, ms) {
+    if (!song) return;
+    const from = song.volume, t0 = performance.now();
+    (function step(t) { const k = Math.max(0, Math.min(1, (t - t0) / ms)); song.volume = Math.max(0, Math.min(1, from + (v - from) * k)); if (k < 1) requestAnimationFrame(step); })(t0);
+  }
+  function applause(dur, vol) {
+    if (!audio()) return; const t = ctx.currentTime;
+    for (let k = 0; k < dur * 60; k++) { const at = t + Math.random() * dur, fade = 1 - (at - t) / dur; noise(at, .03 + Math.random() * .03, 'bandpass', 1200 + Math.random() * 2500, vol * (.4 + fade * .6), master, 1.2); }
+  }
+  const now = () => ctx.currentTime;
+  const sfx = {
+    boing: () => audio() && boingAt(now()),
+    squeak: () => audio() && (squeakAt(now()), squeakAt(now() + .16, null, 1.15)),
+    slide: up => audio() && slideAt(now(), up),
+    whistle() { applause(.8, .1); },
+    _unusedWhistle() {
+      if (!audio()) return; const t = now();
+      const o = ctx.createOscillator(); o.type = 'sine';
+      o.frequency.setValueAtTime(900, t); o.frequency.exponentialRampToValueAtTime(2300, t + .22);
+      o.frequency.setValueAtTime(1000, t + .32); o.frequency.exponentialRampToValueAtTime(2500, t + .5); o.frequency.exponentialRampToValueAtTime(700, t + .85);
+      const g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.2, t + .04); g.gain.setValueAtTime(.2, t + .22);
+      g.gain.exponentialRampToValueAtTime(.01, t + .28); g.gain.exponentialRampToValueAtTime(.2, t + .36); g.gain.exponentialRampToValueAtTime(.0001, t + .9);
+      o.connect(g).connect(master); o.start(t); o.stop(t + 1);
+    },
+    rip() { if (!audio()) return; const t = now(); noise(t, .28, 'bandpass', 2600, .7, master, 1.2); noise(t + .05, .2, 'bandpass', 1700, .5, master, 1.2); boingAt(t + .12, master, 180); },
+    sadTrombone() {
+      if (!audio()) return; const t = now();
+      [[58, 0, .32], [57, .34, .32], [56, .68, .32], [55, 1.02, 1]].forEach(([m, d, len]) => {
+        const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.setValueAtTime(mtof(m), t + d);
+        if (len > .5) vibrato(o, t + d + .2, 5, 4, len);
+        const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(400, t + d); f.frequency.linearRampToValueAtTime(1300, t + d + .1); f.frequency.linearRampToValueAtTime(500, t + d + len);
+        const g = ctx.createGain(); env(g, t + d, .22, len, .03);
+        o.connect(f).connect(g).connect(master); o.start(t + d); o.stop(t + d + len + .05);
+      });
+    },
+    spray() {
+      if (!audio()) return; const t = now();
+      noise(t, .4, 'highpass', 4000, .35, master);
+      for (let k = 0; k < 5; k++) tone(t + .05 + k * .06, 'sine', 1800 + Math.random() * 2400, .25, .06, null, master);
+    },
+    drumroll() { if (!audio()) return; const t = now(); for (let k = 0; k < 28; k++) noise(t + k * .045, .06, 'bandpass', 1800, .12 + k * .012, master, .7); },
+    fanfare() { if (!audio()) return; const t = now(); [[72, 0, .14], [76, .15, .14], [79, .3, .14], [84, .45, .9]].forEach(([m, d, l]) => { kazoo(t + d, m, l, .22, master); kazoo(t + d, m - 12, l, .12, master); }); },
+    airhorn() { if (!audio()) return; [0, .22, .44].forEach((d, k) => { const t = now() + d, len = k === 2 ? .8 : .16; [466, 470, 233].forEach(f => tone(t, 'sawtooth', f, len, .11, 3000, master)); }); },
+    thunder() {
+      if (!audio()) return;
+      const dur = 3.2, buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate), d = buf.getChannelData(0);
+      let last = 0; for (let i = 0; i < d.length; i++) { last = (last + .02 * (Math.random() * 2 - 1)) / 1.02; const p = i / d.length; d[i] = last * 3.5 * Math.pow(1 - p, 2); }
+      const s = ctx.createBufferSource(); s.buffer = buf; const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 900;
+      const g = ctx.createGain(); g.gain.value = 1.2; s.connect(f).connect(g).connect(master); s.start();
+    }
+  };
+  let windSrc = null, windGain = null, windFilt = null, windOsc = null, windOscG = null;
+  function windOn() {
+    if (!audio() || windSrc) return;
+    windSrc = ctx.createBufferSource(); windSrc.buffer = noiseBuf; windSrc.loop = true;
+    windFilt = ctx.createBiquadFilter(); windFilt.type = 'bandpass'; windFilt.Q.value = .6; windFilt.frequency.value = 400;
+    windGain = ctx.createGain(); windGain.gain.value = 0;
+    windSrc.connect(windFilt).connect(windGain).connect(master); windSrc.start();
+    windOsc = ctx.createOscillator(); windOsc.type = 'sawtooth'; windOsc.frequency.value = 200; vibrato(windOsc, now(), 6, 8, 30);
+    const kf = ctx.createBiquadFilter(); kf.type = 'bandpass'; kf.frequency.value = 900; kf.Q.value = 1.5;
+    windOscG = ctx.createGain(); windOscG.gain.value = 0;
+    windOsc.connect(kf).connect(windOscG).connect(master); windOsc.start();
+  }
+  function windLevel(v, held) {
+    if (!windGain) return;
+    windGain.gain.setTargetAtTime(v * .4, now(), .05); windFilt.frequency.setTargetAtTime(300 + v * 900, now(), .05);
+    windOsc.frequency.setTargetAtTime(180 + v * 420, now(), .05); windOscG.gain.setTargetAtTime(held ? .07 : 0, now(), .05);
+  }
+  function windOff() {
+    if (!windSrc) return;
+    windGain.gain.setTargetAtTime(0, now(), .2); windOscG.gain.setTargetAtTime(0, now(), .1);
+    const a = windSrc, b = windOsc; setTimeout(() => { a.stop(); b.stop(); }, 900); windSrc = null;
+  }
+
+  const soundBtn = document.getElementById('soundBtn');
+  soundBtn.addEventListener('click', () => {
+    soundOn = !soundOn;
+    soundBtn.textContent = soundOn ? 'Garsas įjungtas' : 'Garsas išjungtas';
+    soundBtn.setAttribute('aria-pressed', String(soundOn));
+    if (master) master.gain.setTargetAtTime(soundOn ? .8 : 0, ctx.currentTime, .05);
+    if (song) song.muted = !soundOn;
+  });
+
+  /* ---------- Šeši reikalavimai ---------- */
+  const STEPS = ['Muzika', 'Marškinėliai', 'Blizgučiai', 'Vėjas', 'Judesys', 'Griaustinis'];
+  STEPS.forEach((s, i) => { const li = document.createElement('li'); li.textContent = i + 1; li.title = s; stepsEl.appendChild(li); });
+  let current = 0, ripped = 0;
+  function markSteps() { [...stepsEl.children].forEach((li, i) => { li.className = i < current ? 'done' : i === current ? 'current' : ''; }); }
+  function go(n) { current = n; markSteps(); renders[n](); }
+
+  const renders = [
+    () => {
+      task.innerHTML = `<h2>Įjunk muziką</h2><p>Be muzikos vaikinai nešoka. Pasuk garsą į viršų!</p>
+        <button class="btn big" id="beat">Leisk muziką!</button>`;
+      document.getElementById('beat').addEventListener('click', () => { startMusic(); beginShow(); });
+    },
+    () => {
+      task.innerHTML = `<h2>Nuplėšk jiems marškinėlius</h2><p>Spustelk ant kiekvieno šokėjo. Nesidrovėk – juk dėl to jie ir atvažiavo.</p>
+        <p><strong id="ripCount">Nuplėšta: 0 iš 3</strong></p>`;
+      dancers[0].focus({ preventScroll: true });
+    },
+    () => {
+      stage.classList.add('show-can');
+      task.innerHTML = `<h2>Apibarstyk juos blizgučiais</h2><p>Be blizgesio – jokio šou. Purkšk, kol blizgesys pasieks 100&nbsp;%.</p>
+        <button class="btn big" id="sprayBtn">Pšš! Purkšti</button>
+        <div class="meter" role="progressbar" aria-label="Blizgesio lygis" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="gMeter"><span id="gFill"></span></div>`;
+      let sprays = 0; const need = 5;
+      const btn = document.getElementById('sprayBtn');
+      btn.addEventListener('click', () => {
+        if (sprays >= need) return;
+        sprays++; shootGlitter(sprays - 1);
+        const can = document.getElementById('can'); can.classList.remove('psst'); void can.offsetWidth; can.classList.add('psst');
+        document.getElementById('gFill').style.width = (sprays / need * 100) + '%';
+        document.getElementById('gMeter').setAttribute('aria-valuenow', Math.round(sprays / need * 100));
+        if (sprays === need) {
+          dancers.forEach(d => d.classList.add('glam'));
+          btn.textContent = 'Spindi kaip diskotekos rutulys'; btn.disabled = true;
+          setTimeout(() => { stage.classList.remove('show-can'); go(3); }, 1500);
+        }
+      });
+    },
+    () => {
+      stage.classList.add('show-fan');
+      task.innerHTML = `<h2>Įjunk vėjo mašiną</h2><p>Tokiems plaukams būtinas vėjas. Spausk ir laikyk, kol skalė prisipildys.</p>
+        <button class="btn big" id="windBtn">Laikyk – pučia!</button>
+        <div class="meter live" role="progressbar" aria-label="Vėjo stiprumas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="meter"><span id="meterFill"></span></div>`;
+      setupWind();
+    },
+    () => {
+      task.innerHTML = `<h2>Išrink jų firminį judesį</h2><p>Išbandyk visus ir rinkis tą, už kurį mielai sumokėtum.</p>
+        <div class="row" id="moves">
+          <button class="btn ghost" data-move="roll">Kūno banga</button>
+          <button class="btn ghost" data-move="lasso">Laso</button>
+          <button class="btn ghost" data-move="sprinkler">Laistytuvas</button>
+          <button class="btn ghost" data-move="pec">Krūtinės šokis</button>
+        </div>
+        <p style="margin-top:1rem"><button class="btn" id="lockIn" hidden>Šitas!</button></p>`;
+      const lock = document.getElementById('lockIn');
+      const moveSfx = { roll: () => sfx.boing(), lasso: () => sfx.boing(), sprinkler: () => sfx.squeak(), pec: () => sfx.squeak() };
+      document.querySelectorAll('#moves button').forEach(b => b.addEventListener('click', () => {
+        stage.classList.remove('move-roll', 'move-lasso', 'move-sprinkler', 'move-pec');
+        stage.classList.add('move-' + b.dataset.move); currentMove = b.dataset.move;
+        document.querySelectorAll('#moves button').forEach(x => { x.classList.toggle('picked', x === b); x.setAttribute('aria-pressed', String(x === b)); });
+        moveSfx[b.dataset.move]();
+        lock.hidden = false;
+      }));
+      lock.addEventListener('click', () => { sfx.whistle(); go(5); });
+    },
+    () => {
+      task.innerHTML = `<h2>Paleisk griaustinį</h2><p>Vaikinai įšilę, išblizginti, išvėjuoti ir visiškai be marškinėlių.</p>
+        <button class="btn big" id="unleash">Paleisti griaustinį!</button>`;
+      document.getElementById('unleash').addEventListener('click', e => {
+        e.currentTarget.disabled = true; e.currentTarget.textContent = 'Būgnai…';
+        sfx.drumroll(); songVolume(.3, 400); stage.classList.add('drumroll');
+        setTimeout(reveal, 1300);
+      });
+    }
+  ];
+
+  function onDancer(i, el) {
+    if (current !== 1) {
+      if (current === 0) sfx.sadTrombone();
+      else if (el.classList.contains('ripped')) sfx.squeak();
+      return;
+    }
+    if (el.classList.contains('ripped')) { sfx.squeak(); return; }
+    el.classList.add('ripped');
+    el.querySelector('.tank').classList.add('gone');
+    el.setAttribute('aria-label', crew[i].name + ', be marškinėlių');
+    sfx.rip(); setTimeout(sfx.whistle, 350);
+    if (navigator.vibrate) navigator.vibrate(30);
+    if (i === 1) document.getElementById('ballTank').classList.add('on');
+    ripped++;
+    const c = document.getElementById('ripCount'); if (c) c.textContent = 'Nuplėšta: ' + ripped + ' iš 3';
+    if (ripped === 3) setTimeout(() => go(2), 1200);
+    else { const nx = dancers.find(d => !d.classList.contains('ripped')); if (nx) nx.focus({ preventScroll: true }); }
+  }
+
+  function shootGlitter(k) {
+    if (reduce) return;
+    const sr = stage.getBoundingClientRect(), cr = document.getElementById('can').getBoundingClientRect();
+    const target = dancers[k % 3].getBoundingClientRect();
+    const colors = ['#ffc531', '#fff3b0', '#ff5096', '#4fc3d9', '#ffffff'];
+    for (let n = 0; n < 26; n++) {
+      const g = document.createElement('i'); g.className = 'glitter';
+      g.style.background = colors[n % colors.length];
+      const x0 = cr.left - sr.left + cr.width * .4, y0 = cr.top - sr.top + 6;
+      const x1 = target.left - sr.left + target.width * (.2 + Math.random() * .6), y1 = target.top - sr.top + target.height * (.25 + Math.random() * .4);
+      g.style.left = x0 + 'px'; g.style.top = y0 + 'px';
+      stage.appendChild(g);
+      g.animate([
+        { transform: 'translate(0,0) rotate(0)', opacity: 1 },
+        { transform: `translate(${(x1 - x0) * .5}px, ${(y1 - y0) * .5 - 50}px) rotate(200deg)`, opacity: 1, offset: .5 },
+        { transform: `translate(${x1 - x0}px, ${y1 - y0}px) rotate(400deg)`, opacity: 0 }
+      ], { duration: 600 + Math.random() * 400, easing: 'ease-out' }).onfinish = () => g.remove();
+    }
+  }
+
+  function setupWind() {
+    const btn = document.getElementById('windBtn'), fill = document.getElementById('meterFill'), meter = document.getElementById('meter');
+    let held = false, power = 0, last = performance.now(), done = false, peak = 0;
+    const down = e => { if (done) return; if (e) e.preventDefault(); held = true; windOn(); stage.classList.add('blowing'); };
+    const up = () => {
+      if (held && !done && power > .25 && power < .95) sfx.sadTrombone();
+      held = false; stage.classList.remove('blowing');
+    };
+    btn.addEventListener('pointerdown', e => { if (btn.setPointerCapture) btn.setPointerCapture(e.pointerId); down(e); });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => btn.addEventListener(ev, up));
+    btn.addEventListener('contextmenu', e => e.preventDefault());
+    btn.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!e.repeat) down(); } });
+    btn.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') up(); });
+    function tick(t) {
+      const dt = Math.min((t - last) / 1000, .1); last = t;
+      power = held ? Math.min(1, power + dt / 2.4) : Math.max(0, power - dt * .5);
+      fill.style.width = (power * 100) + '%'; meter.setAttribute('aria-valuenow', Math.round(power * 100));
+      windLevel(held ? .4 + power * .6 : 0, held);
+      if (power >= 1 && !done) {
+        done = true; held = false; stage.classList.remove('blowing'); windOff();
+        stage.classList.add('windswept');
+        btn.textContent = 'Didinga.'; btn.disabled = true; sfx.whistle();
+        setTimeout(() => { stage.classList.remove('show-fan'); go(4); }, 1100);
+        return;
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function reveal() {
+    stage.classList.remove('drumroll');
+    sfx.thunder(); sfx.rip(); songVolume(1, 1200); setTimeout(sfx.airhorn, 120); setTimeout(() => applause(3.5, .16), 400);
+    const f = document.getElementById('flash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
+    if (navigator.vibrate) navigator.vibrate([80, 40, 160]);
+    stage.classList.add('finale');
+    current = 6; markSteps();
+    const title = boss ? 'Su Bosų diena, ' + esc(boss) + '!' : 'Su Bosų diena!';
+    task.innerHTML = `<h2 id="revealTitle" tabindex="-1">${title}</h2>
+      <p>Ir dar viena žinia nuo vaikinų: tu eini jų pamatyti gyvai! Bilietai du – tad pasiimk draugę ar ką tik nori.</p>
+      <article class="ticket">
+        <div class="ticket-main">
+          <p class="admit">Tu eini į</p>
+          <h3>Australia's Thunder From Down Under</h3>
+          <dl>
+            <dt>Kada</dt><dd>Penktadienį, spalio 23 d., 19:00</dd>
+            <dt>Kur</dt><dd>Compensa koncertų salė, Kernavės g. 84, Vilnius</dd>
+            <dt>Vietos</dt><dd>Parteris, 5 eilė, 10 ir 11 vietos</dd>
+          </dl>
+        </div>
+        <div class="ticket-stub"><span>Dviem</span></div>
+      </article>
+      <div class="files">
+        <h3>Tavo bilietai</h3>
+        <div class="scans">
+          <figure><img src="${TICKET_IMG[0]}" alt="Bilietas į Australia's Thunder From Down Under, Parteris, 5 eilė, 10 vieta"><figcaption>1 bilietas: 5 eilė, 10 vieta</figcaption></figure>
+          <figure><img src="${TICKET_IMG[1]}" alt="Bilietas į Australia's Thunder From Down Under, Parteris, 5 eilė, 11 vieta"><figcaption>2 bilietas: 5 eilė, 11 vieta</figcaption></figure>
+        </div>
+        <a class="btn" id="dlBtn" href="assets/Thunder-From-Down-Under-bilietai.pdf" download>Atsisiųsti bilietus (PDF)</a>
+        <p class="dlmsg" id="dlMsg" aria-live="polite"></p>
+      </div>
+      <div class="note">
+        <p>Ačiū, kad visus metus mus kenti ir dar kaip nors suvaldai. Dabar tavo eilė atsipalaiduoti ir mėgautis vaizdu!</p>
+        <p class="sign">Su meile, ${from ? esc(from) : 'tavo komanda'}</p>
+      </div>
+      <div class="row">
+        <a class="btn ghost" href="https://www.bilietai.lt/en/tickets/FQ74VS7Q5Q/australias-thunder-from-down-under-most-wanted-tour-2026-vilnius" target="_blank" rel="noopener noreferrer">Renginio informacija</a>
+        <button class="btn ghost" id="again">Pradėti iš naujo</button>
+      </div>`;
+    document.getElementById('again').addEventListener('click', () => location.reload());
+    setupDownload();
+    const t = document.getElementById('revealTitle'); t.focus({ preventScroll: true });
+    setTimeout(() => t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }), 400);
+    if (!reduce) sparks();
+  }
+
+  function setupDownload() {}
+
+  function sparks() {
+    const c = document.getElementById('sparks'), x = c.getContext('2d');
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    c.width = innerWidth * dpr; c.height = innerHeight * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const colors = ['#ffc531', '#fff3b0', '#ff5096', '#4fc3d9'];
+    const ps = [];
+    for (let i = 0; i < 180; i++) { const a = Math.random() * Math.PI * 2, sp = 3 + Math.random() * 9; ps.push({ x: innerWidth / 2, y: innerHeight * .4, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 4, w: 4 + Math.random() * 5, r: Math.random() * 6, c: colors[i % 4], life: 1 }); }
+    (function frame() {
+      x.clearRect(0, 0, innerWidth, innerHeight); let alive = false;
+      for (const p of ps) {
+        if (p.life <= 0) continue; alive = true;
+        p.vy += .2; p.vx *= .985; p.x += p.vx; p.y += p.vy; p.r += .2; p.life -= .008;
+        x.globalAlpha = Math.max(p.life, 0); x.fillStyle = p.c;
+        x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillRect(-p.w / 2, -p.w / 4, p.w, p.w / 2); x.restore();
+      }
+      if (alive) requestAnimationFrame(frame); else x.clearRect(0, 0, innerWidth, innerHeight);
+    })();
+  }
+
+  go(0);
+
+  /* Muzika paleidžiama automatiškai. Jei naršyklė autoplay užblokuoja,
+     daina prasideda nuo pirmo bet kokio paspaudimo ar klavišo. */
+  ensureSong();
+  startMusic(false).then(ok => {
+    if (ok) { beginShow(); return; }
+    const evs = ['pointerdown', 'keydown', 'touchstart'];
+    const unlock = () => {
+      evs.forEach(ev => document.removeEventListener(ev, unlock, true));
+      startMusic(true).then(played => { if (played) beginShow(); });
+    };
+    evs.forEach(ev => document.addEventListener(ev, unlock, true));
+  });
+})();
+</script>
+</body>
+</html>
